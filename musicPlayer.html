@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        *{
+            padding: 0%;
+            margin: 0%;
+            box-sizing: border-box;
+        }
+        .main-div{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mobile-div{
+            border-radius: 20px;
+            width: 300px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-direction: column;
+            box-shadow:  0px 0px 15px gray;
+        }
+        .now-playing-heading-div h1{
+           font-family: 'Dancing Script', cursive;
+           font-size: 22px;
+        }
+        .img-div img{
+            border-radius: 50%;
+            box-shadow:  0px 0px 8px gray;
+        }
+        .animation{
+            animation: spin 2s linear infinite;
+        }
+
+        /* rotation for image  */
+        @keyframes spin {
+        from {
+        transform: rotate(0deg);
+        }
+        to {
+        transform: rotate(360deg);
+        }
+}
+
+        .title-div h1{
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 26px;
+        }
+
+        .controls-div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main-div">
+        <div class="mobile-div">
+            <div class="now-playing-heading-div">
+                <h1>Now Playing</h1>
+            </div>
+            <div class="img-div">
+                <img src="photos/photo1.jpg" class="img" alt="" width="200" height="200">
+            </div>
+            <div class="title-div">
+                <h1 class="title">Title</h1>
+            </div>
+            <div class="desciption-div">
+                <p class="description">description</p>
+            </div>
+            <div class="controls-div">
+                <i class="fa-sharp fa-solid fa-backward" id="backward"></i>
+                <i class="fa-solid fa-play" id="play"></i>
+                <i class="fa-solid fa-forward" id="forward"></i>
+            </div>
+        </div>
+        <audio src="music/ music (1).mp3" id="music"></audio>
+    </div>
+
+    <script>
+        const play = document.getElementById('play');
+        const audio = document.getElementById('music')
+        const img = document.querySelector('.img');
+        const previous = document.getElementById('backward');
+        const next = document.getElementById('forward');
+        const title = document.querySelector('.title');
+        const description = document.querySelector('.description')
+
+        
+        // object container data for song or metadata
+        const songs = [
+            {
+                name : 'Sample1',
+                description : 'description1',
+                audio :  ' music (1)',
+                image : 'photo1'
+            },
+            {
+                name : 'Sample2',
+                description : 'description2',
+                audio :  ' music (2)',
+                image : 'photo2'
+            },
+            {
+                name : 'Sample3',
+                description : 'description3',
+                audio :  ' music (3)',
+                image : 'photo3'
+            }
+        ]
+
+        isPlay = false;
+
+        // function is playing song 
+        const playSong = ()=>{
+            isPlay = true;
+            audio.play();
+            play.classList.replace('fa-play', 'fa-pause');
+            img.classList.add('animation')
+        }
+
+        // function is pausing song 
+        const pauseSong = ()=>{
+            isPlay = false;
+            audio.pause();
+            play.classList.replace('fa-pause', 'fa-play')
+            img.classList.remove('animation')
+        }
+
+        play.addEventListener('click', ()=>{
+            isPlay ? pauseSong() : playSong();
+        })
+
+         const loadSong = (songs)=>{
+            title.textContent = songs.name;
+            description.textContent = songs.description;
+            audio.src = `music/${songs.audio}.mp3`;
+            img.src = `photos/${songs.image}.jpg`;
+         }
+
+         let songIndex = 0;
+         next.addEventListener('click', ()=>{
+            songIndex = (songIndex + 1) % songs.length;
+            loadSong(songs[songIndex]);
+            playSong();
+         })
+         previous.addEventListener('click', ()=>{
+            songIndex = (songIndex - 1 + songs.length) % songs.length;
+            loadSong(songs[songIndex]);
+            playSong();
+         })
+
+
+    </script>
+</body>
+</html>
